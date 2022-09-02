@@ -7,17 +7,17 @@
           <checkSVG />
         </span>
       </div>
-    </div>
 
-    <div class="task__text">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium,
-      molestias?
-    </div>
+      <div class="task__text">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium,
+        molestias?
+      </div>
 
-    <div class="task__delete">
-      <button type="button">
-        <crossSVG />
-      </button>
+      <div class="task__delete">
+        <button type="button">
+          <crossSVG />
+        </button>
+      </div>
     </div>
   </div>
 </template>

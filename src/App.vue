@@ -5,8 +5,10 @@
     <AddTaskForm />
 
     <TasksList :tasksList="list" />
-    <!---->
-    <TasksList :tasksList="list" />
+
+    <hr />
+
+    <TasksList :isCompleted="true" :tasksList="list" />
   </main>
 </template>
 

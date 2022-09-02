@@ -1,4 +1,17 @@
+@function stripUnit($value) {
+  @return $value / ($value * 0 + 1);
+}
+
+@function rem($pxValue) {
+  @return #{stripUnit($pxValue) / stripUnit($html-font-size)}rem;
+}
+
+$html-font-size: 16px;
+
 $base-dark: #222435;
+$base-light: #FFFFFF;
+$light-1: #E7E8F5;
+$light-2: #FAFAFD;
 $gray-1: #383A4C;
 $gray-2: #535568;
 $gray-3: #67697A;
@@ -7,7 +20,6 @@ $gray-5: #9799AD;
 $blue-dark: #1E446E;
 $blue-light: #4EA2FF;
 
-
 *,
 *::before,
 *::after {
@@ -15,18 +27,222 @@ $blue-light: #4EA2FF;
   margin: 0;
   position: relative;
   font-weight: normal;
+  outline: none;
 }
 
 body {
   min-height: 100vh;
-  color: black;
-  background: white;
-  transition: color 0.5s, background-color 0.5s;
-  line-height: 1.6;
+  color: $base-light;
+  background: $base-dark;
+  transition: color 0.5s ease-in-out, background-color 0.5s ease-in-out;
+  line-height: 1.2;
   font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
   Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  font-size: 15px;
+  font-size: $html-font-size;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: $gray-1;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  line-height: inherit;
+  padding: 0;
+}
+
+.todo-main {
+  padding: rem(40);
+}
+
+.add-task {
+  &__inner {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    border: 1px solid $gray-2;
+    padding: rem(20);
+    transition: background-color 0.25s ease-in-out, border-color 0.25s ease-in-out;
+  }
+
+  &__input {
+    flex: 1 0 0;
+    height: rem(20);
+
+    input {
+      background-color: transparent;
+      border: none;
+      width: 100%;
+      height: 100%;
+      display: inline-block;
+      color: $light-2;
+      font-weight: 400;
+      padding: 0;
+
+      &::placeholder {
+        color: $gray-4;
+        transition: color 0.25s ease-in-out;
+      }
+
+
+    }
+
+    &:hover {
+      input {
+        &::placeholder {
+          color: $light-2;
+        }
+      }
+    }
+
+    &:focus {
+      background-color: $gray-1;
+    }
+  }
+
+  &__add-btn {
+    width: rem(20);
+    height: rem(20);
+    flex: 0 1 rem(20);
+    margin-right: rem(20);
+
+    svg {
+      width: rem(20);
+      height: rem(20);
+      fill: $gray-4;
+    }
+  }
+
+  &.focused &__inner {
+    background-color: $gray-1;
+    border-color: $gray-2;
+  }
+
+  &.focused &__input:hover {
+    input {
+      &::placeholder {
+        color: $gray-4;
+      }
+    }
+  }
+}
+
+.tasks-list {
+  margin: rem(20) 0;
+
+  &__completed-sign {
+    padding: 6px 8px;
+    background-color: $blue-dark;
+    border-radius: 4px;
+    margin-bottom: rem(20);
+    display: inline-flex;
+    align-items: center;
+
+    svg {
+      width: rem(16);
+      height: rem(16);
+      fill: $blue-light;
+      margin-right: 8px;
+    }
+
+    span {
+      font-size: rem(14);
+      color: $blue-light;
+      font-weight: 500;
+    }
+  }
+}
+
+.task {
+  &__inner {
+    display: flex;
+    align-items: center;
+    padding: rem(20);
+    border-radius: 10px;
+    background-color: $gray-1;
+  }
+
+  & + & {
+    margin-top: 10px;
+  }
+
+  &__check {
+    width: rem(20);
+    height: rem(20);
+    flex: 1 0 rem(20);
+    margin-right: rem(20);
+    position: relative;
+    border-radius: 50%;
+    border: 2px solid $gray-3;
+    transition: border-color 0.25s ease-in-out;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__check-filler {
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: rem(20);
+    height: rem(20);
+    border-radius: 50%;
+    background-color: $blue-light;
+    opacity: 0;
+    transition: opacity 0.25s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 8px;
+      height: 8px;
+      fill: $base-dark;
+    }
+  }
+
+
+  &__text {
+    font-weight: 500;
+    line-height: rem(19);
+  }
+
+  &__delete {
+    margin-left: auto;
+
+    button {
+      width: rem(20);
+      height: rem(20);
+      padding: 2px;
+
+      svg {
+        width: rem(16);
+        height: rem(16);
+        fill: $gray-5;
+        transition: fill 0.25s ease-in-out;
+      }
+
+      &:hover {
+        svg {
+          fill: $light-1;
+        }
+      }
+    }
+  }
+
+  &.active &__check {
+    border-color: transparent;
+  }
+
+  &.active &__check-filler {
+    opacity: 1;
+  }
 }
