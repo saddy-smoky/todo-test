@@ -1,20 +1,18 @@
 <template>
-  <div class="task">
+  <div class="task" :class="{ 'task--completed': task.completed }">
     <div class="task__inner">
-      <div class="task__check">
-        <input type="checkbox" hidden />
+      <button class="task__check" @click="setTaskCompletion">
         <span class="task__check-filler">
           <checkSVG />
         </span>
-      </div>
+      </button>
 
       <div class="task__text">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium,
-        molestias?
+        {{ task.todo }}
       </div>
 
       <div class="task__delete">
-        <button type="button">
+        <button type="button" @click="deleteTask">
           <crossSVG />
         </button>
       </div>
@@ -25,4 +23,24 @@
 <script setup lang="ts">
 import checkSVG from "@/assets/icons/check.svg";
 import crossSVG from "@/assets/icons/cross.svg";
+
+import type { Task } from "@/components/types";
+import { defineEmits } from "vue";
+
+const props = defineProps<{
+  task: Task;
+}>();
+
+const emits = defineEmits(["emitCompletion", "emitDeletion"]);
+
+const setTaskCompletion = () => {
+  emits("emitCompletion", {
+    id: props.task.id,
+    completed: !props.task.completed,
+  });
+};
+
+const deleteTask = () => {
+  emits("emitDeletion", props.task.id);
+};
 </script>
