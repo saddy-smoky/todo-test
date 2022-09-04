@@ -1,6 +1,13 @@
-export interface ToDo {
-  id: string;
-  text: string;
+export interface Task {
+  id: number;
+  todo: string;
   completed: boolean;
-  date: number;
+  userId?: number;
+}
+
+export interface MockTodoList {
+  todos: Task[];
+  total: number;
+  skip: string;
+  limit: number;
 }
