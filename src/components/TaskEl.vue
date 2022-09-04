@@ -1,19 +1,39 @@
 <template>
-  <div class="task" :class="{ 'task--completed': task.completed }">
+  <div
+    class="task"
+    :class="{
+      'task--completed': isTaskCompleted,
+      'task--editing': taskEditing,
+    }"
+  >
     <div class="task__inner">
-      <button class="task__check" @click="setTaskCompletion">
+      <button v-if="!taskEditing" class="task__check" @click="completeTask">
         <span class="task__check-filler">
           <checkSVG />
         </span>
       </button>
 
-      <div class="task__text">
-        {{ task.todo }}
+      <div
+        v-if="!taskEditing"
+        class="task__text"
+        @dblclick="taskEditing = !taskEditing"
+      >
+        {{ taskText }}
       </div>
 
-      <div class="task__delete">
+      <div v-if="taskEditing" class="task__edit">
+        <input type="text" v-model="taskText" />
+      </div>
+
+      <div v-if="!taskEditing" class="task__delete">
         <button type="button" @click="deleteTask">
           <crossSVG />
+        </button>
+      </div>
+
+      <div v-if="taskEditing" class="task__confirm-edit">
+        <button type="button" @click="confirmTaskEdit">
+          <checkSVG />
         </button>
       </div>
     </div>
@@ -25,19 +45,32 @@ import checkSVG from "@/assets/icons/check.svg";
 import crossSVG from "@/assets/icons/cross.svg";
 
 import type { Task } from "@/components/types";
-import { defineEmits } from "vue";
+import { defineEmits, ref } from "vue";
 
 const props = defineProps<{
   task: Task;
 }>();
 
-const emits = defineEmits(["emitCompletion", "emitDeletion"]);
+const taskEditing = ref(false);
+const isTaskCompleted = ref(props.task.completed);
+const taskText = ref(props.task.todo);
 
-const setTaskCompletion = () => {
-  emits("emitCompletion", {
+const completeTask = () => {
+  isTaskCompleted.value = !isTaskCompleted.value;
+
+  confirmTaskEdit();
+};
+
+const emits = defineEmits(["emitDeletion", "emitEditing"]);
+
+const confirmTaskEdit = () => {
+  emits("emitEditing", {
+    completed: isTaskCompleted.value,
+    todo: taskText.value,
     id: props.task.id,
-    completed: !props.task.completed,
-  });
+  } as Task);
+
+  taskEditing.value = false;
 };
 
 const deleteTask = () => {

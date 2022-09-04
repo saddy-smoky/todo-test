@@ -22,25 +22,27 @@ export const useTasksStore = defineStore({
       this.tasksList = await api.getTasks();
       this.isPending = false;
     },
-    setTaskCompletion(taskInfo: { id: string; completed: boolean }) {
+    setTaskEditing(task: Task) {
       this.isPending = true;
 
       let newTask: Task;
       const oldTasksList = this.tasksList.todos;
       const oldTaskIndex = oldTasksList.findIndex(
-        (item) => +item.id === +taskInfo.id
+        (item) => +item.id === +task.id
       );
 
       api
-        .updateTask(taskInfo)
+        .updateTask(task)
         .then((res: Task) => {
           newTask = res;
 
-          oldTasksList.splice(oldTaskIndex, 1, newTask);
+          oldTasksList.splice(oldTaskIndex, 1, task);
 
           this.tasksList.todos = oldTasksList;
         })
-        .catch((err) => new Error(err))
+        .catch((err) => {
+          alert(err);
+        })
         .finally(() => {
           this.isPending = false;
         });
@@ -58,7 +60,9 @@ export const useTasksStore = defineStore({
 
           this.tasksList.todos = oldTasksList;
         })
-        .catch((err) => new Error(err))
+        .catch((err) => {
+          alert(err);
+        })
         .finally(() => {
           this.isPending = false;
         });
@@ -80,7 +84,9 @@ export const useTasksStore = defineStore({
 
           this.tasksList.todos = oldTasksList;
         })
-        .catch((err) => new Error(err))
+        .catch((err) => {
+          alert(err);
+        })
         .finally(() => {
           this.isPending = false;
         });

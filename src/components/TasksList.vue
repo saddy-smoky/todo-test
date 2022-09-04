@@ -11,8 +11,8 @@
         v-for="task in tasksList"
         :task="task"
         :key="task.id"
-        @emitCompletion="emitCompletionHandler"
         @emitDeletion="emitDeletionHandler"
+        @emitEditing="emitEditingHandler"
       />
     </TransitionGroup>
   </section>
@@ -27,22 +27,18 @@ import TaskEl from "@/components/TaskEl.vue";
 import checkSVG from "@/assets/icons/check.svg";
 
 import { useTasksStore } from "@/store";
+const { setTaskEditing, setTaskDeletion } = useTasksStore();
 
-const { setTaskCompletion, setTaskDeletion } = useTasksStore();
-
-const props = defineProps<{
+defineProps<{
   tasksList: Task[] | undefined;
   isCompleted?: boolean;
 }>();
 
-const emitCompletionHandler = (taskInfo: {
-  id: string;
-  completed: boolean;
-}) => {
-  setTaskCompletion(taskInfo);
-};
-
 const emitDeletionHandler = (taskId: string) => {
   setTaskDeletion(taskId);
+};
+
+const emitEditingHandler = (task: Task) => {
+  setTaskEditing(task);
 };
 </script>
