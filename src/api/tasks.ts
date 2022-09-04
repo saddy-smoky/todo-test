@@ -8,29 +8,53 @@ export default {
   },
 
   async addNewTask(task: Omit<Task, "id">): Promise<Task> {
-    return await fetch("https://dummyjson.com/todos/add", {
+    return fetch("https://dummyjson.com/todos/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(task),
-    }).then((res) => res.json());
+    }).then(async (res) => {
+      const data = await res.json();
+
+      if (!res.ok) {
+        const error = (data && data.message) || res.status;
+        return Promise.reject(error);
+      }
+
+      return data;
+    });
   },
 
   async deleteTask(taskId: string): Promise<Task> {
-    return await fetch(`https://dummyjson.com/todos/${taskId}`, {
+    return fetch(`https://dummyjson.com/todos/${taskId}`, {
       method: "DELETE",
-    }).then((res) => res.json());
+    }).then(async (res) => {
+      const data = await res.json();
+
+      if (!res.ok) {
+        const error = (data && data.message) || res.status;
+        return Promise.reject(error);
+      }
+
+      return data;
+    });
   },
 
-  async updateTask(taskInfo: {
-    id: string;
-    completed: boolean;
-  }): Promise<Task> {
-    return await fetch(`https://dummyjson.com/todos/${taskInfo.id}`, {
-      method: "PUT" /* or PATCH */,
+  async updateTask(task: Task): Promise<Task> {
+    const { completed } = task;
+
+    return fetch(`https://dummyjson.com/todos/${task.id}`, {
+      method: "PATCH" /* or PATCH */,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        completed: taskInfo.completed,
-      }),
-    }).then((res) => res.json());
+      body: JSON.stringify({ completed }),
+    }).then(async (res) => {
+      const data = await res.json();
+
+      if (!res.ok) {
+        const error = (data && data.message) || res.status;
+        return Promise.reject(error);
+      }
+
+      return data;
+    });
   },
 };
