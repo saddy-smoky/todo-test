@@ -1,0 +1,10 @@
+services:
+  my_todoapp:
+    container_name: my_todoapp
+    image: node:lts
+    working_dir: /app
+    ports:
+      - 8900:8900
+    volumes:
+      - ./:/app
+    command: sh -c "npm install && npm run dev"
