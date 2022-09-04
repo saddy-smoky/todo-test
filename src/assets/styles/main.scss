@@ -23,53 +23,66 @@ $blue-light: #4EA2FF;
 *,
 *::before,
 *::after {
+  font-weight: normal;
+  position: relative;
   box-sizing: border-box;
   margin: 0;
-  position: relative;
-  font-weight: normal;
   outline: none;
 }
 
 body {
-  min-height: 100vh;
-  color: $base-light;
-  background: $base-dark;
-  transition: color 0.5s ease-in-out, background-color 0.5s ease-in-out;
-  line-height: 1.2;
   font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
   Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   font-size: $html-font-size;
-  text-rendering: optimizeLegibility;
+  line-height: 1.2;
+  min-height: 100vh;
+  color: $base-light;
+  background: $base-dark;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 hr {
-  border: none;
   height: 1px;
+  border: none;
   background-color: $gray-1;
 }
 
 button {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
   line-height: inherit;
   padding: 0;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
 }
 
 .todo-main {
+  max-width: rem(900);
+  margin: 0 auto;
   padding: rem(40);
+
+  &__title {
+    margin-bottom: rem(30);
+    text-align: center;
+
+    h1 {
+      font-size: rem(30);
+      font-weight: 700;
+      line-height: rem(36);
+      color: $gray-2;
+    }
+  }
 }
 
 .add-task {
   &__inner {
     display: flex;
     align-items: center;
-    border-radius: 10px;
-    border: 1px solid $gray-2;
     padding: rem(20);
     transition: background-color 0.25s ease-in-out, border-color 0.25s ease-in-out;
+    border: 1px solid $gray-2;
+    border-radius: 10px;
   }
 
   &__input {
@@ -77,18 +90,18 @@ button {
     height: rem(20);
 
     input {
-      background-color: transparent;
-      border: none;
+      font-weight: 400;
+      display: inline-block;
       width: 100%;
       height: 100%;
-      display: inline-block;
-      color: $light-2;
-      font-weight: 400;
       padding: 0;
+      color: $light-2;
+      border: none;
+      background-color: transparent;
 
       &::placeholder {
-        color: $gray-4;
         transition: color 0.25s ease-in-out;
+        color: $gray-4;
       }
 
 
@@ -108,9 +121,9 @@ button {
   }
 
   &__add-btn {
+    flex: 0 1 rem(20);
     width: rem(20);
     height: rem(20);
-    flex: 0 1 rem(20);
     margin-right: rem(20);
 
     svg {
@@ -121,8 +134,8 @@ button {
   }
 
   &.focused &__inner {
-    background-color: $gray-1;
     border-color: $gray-2;
+    background-color: $gray-1;
   }
 
   &.focused &__input:hover {
@@ -138,24 +151,24 @@ button {
   margin: rem(20) 0;
 
   &__completed-sign {
-    padding: 6px 8px;
-    background-color: $blue-dark;
-    border-radius: 4px;
-    margin-bottom: rem(20);
     display: inline-flex;
     align-items: center;
+    margin-bottom: rem(20);
+    padding: 6px 8px;
+    border-radius: 4px;
+    background-color: $blue-dark;
 
     svg {
       width: rem(16);
       height: rem(16);
-      fill: $blue-light;
       margin-right: 8px;
+      fill: $blue-light;
     }
 
     span {
       font-size: rem(14);
-      color: $blue-light;
       font-weight: 500;
+      color: $blue-light;
     }
   }
 }
@@ -174,14 +187,14 @@ button {
   }
 
   &__check {
+    position: relative;
+    flex: 0 0 rem(20);
     width: rem(20);
     height: rem(20);
-    flex: 1 0 rem(20);
     margin-right: rem(20);
-    position: relative;
-    border-radius: 50%;
-    border: 2px solid $gray-3;
     transition: border-color 0.25s ease-in-out;
+    border: 2px solid $gray-3;
+    border-radius: 50%;
 
     &:hover {
       cursor: pointer;
@@ -192,15 +205,15 @@ button {
     position: absolute;
     top: -2px;
     left: -2px;
-    width: rem(20);
-    height: rem(20);
-    border-radius: 50%;
-    background-color: $blue-light;
-    opacity: 0;
-    transition: opacity 0.25s ease-in-out;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: rem(20);
+    height: rem(20);
+    transition: opacity 0.25s ease-in-out;
+    opacity: 0;
+    border-radius: 50%;
+    background-color: $blue-light;
 
     svg {
       width: 8px;
@@ -213,6 +226,7 @@ button {
   &__text {
     font-weight: 500;
     line-height: rem(19);
+    transition: color 0.25s ease-in-out, text-decoration 0.25s ease-in-out;
   }
 
   &__delete {
@@ -226,8 +240,8 @@ button {
       svg {
         width: rem(16);
         height: rem(16);
-        fill: $gray-5;
         transition: fill 0.25s ease-in-out;
+        fill: $gray-5;
       }
 
       &:hover {
@@ -238,11 +252,16 @@ button {
     }
   }
 
-  &.active &__check {
+  &--completed &__check {
     border-color: transparent;
   }
 
-  &.active &__check-filler {
+  &--completed &__check-filler {
     opacity: 1;
+  }
+
+  &--completed &__text {
+    text-decoration: line-through;
+    color: $gray-5;
   }
 }

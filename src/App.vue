@@ -1,42 +1,44 @@
 <template>
   <main class="todo-main">
-    <h1 class="todo-main__title">{{ title }}</h1>
+    <div class="todo-main__title">
+      <h1>{{ title }}</h1>
+    </div>
 
-    <AddTaskForm />
+    <AddTaskForm @emitAddNewTask="emitAddNewTaskHandler" />
 
-    <TasksList :tasksList="list" />
+    <TasksList :tasksList="activeTasksList" />
 
-    <hr />
+    <hr v-if="activeTasksList && activeTasksList.length > 0" />
 
-    <TasksList :isCompleted="true" :tasksList="list" />
+    <TasksList :isCompleted="true" :tasksList="completedTasksList" />
+
+    <Transition>
+      <LoaderEl v-show="isPending" />
+    </Transition>
   </main>
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
+import { useTasksStore } from "@/store";
+
 import { TITLE as title } from "@/components/constants";
 
 import AddTaskForm from "@/components/AddTaskForm.vue";
 import TasksList from "@/components/TasksList.vue";
-import type { ToDo } from "@/components/types";
+import LoaderEl from "@/components/LoaderEl.vue";
 
-const list: ToDo[] = [
-  {
-    id: "1",
-    text: "text",
-    completed: false,
-    date: Date.now(),
-  },
-  {
-    id: "1",
-    text: "text",
-    completed: false,
-    date: Date.now(),
-  },
-  {
-    id: "1",
-    text: "text",
-    completed: false,
-    date: Date.now(),
-  },
-];
+const {
+  isPending,
+  getActiveTasks: activeTasksList,
+  getCompletedTasks: completedTasksList,
+} = storeToRefs(useTasksStore());
+
+const { fetchTasks, setNewTask } = useTasksStore();
+
+fetchTasks();
+
+const emitAddNewTaskHandler = (val: string) => {
+  setNewTask(val);
+};
 </script>
